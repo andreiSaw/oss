@@ -76,10 +76,11 @@ def test_jos():
 @test(10, parent=test_jos)
 def test_cli():
     e = False
-    if res[0] != u'fa' or res[3] != u'fa':
-        e = True
-    if res[1] != u'fa' and res[2] != u'fa':
-        e = True
+    if len(res) == 4:
+        if res[0] != u'fa' or res[3] != u'fa':
+            e = True
+        if res[1] != u'fa' and res[2] != u'fa':
+            e = True
     if e:
         raise AssertionError("cli check isn't passed.\n")
 
