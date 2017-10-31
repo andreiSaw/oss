@@ -74,10 +74,16 @@ test_free(void *ap)
 	for (p = freep; !(bp > p && bp < p->s.next); p = p->s.next)
 		if (p >= p->s.next && (bp > p || bp < p->s.next))
 			break; /* freed block at start or end of arena */
-	if (bp + bp->s.size == p->s.next) { /* join to upper nbr */
+	if (bp + bp->s.size == p->s.next && p + p->s.size == bp) { /* join to both */
+		p->s.size += bp->s.size + p->s.next->s.size;
+		p->s.next->s.next->s.prev = p;
+		p->s.next = p->s.next->s.next;
+	} else if (bp + bp->s.size == p->s.next) { /* join to upper nbr */
 		bp->s.size += p->s.next->s.size;
 		bp->s.next = p->s.next->s.next;
 		bp->s.prev = p->s.next->s.prev;
+		p->s.next->s.next->s.prev = bp;
+		p->s.next = bp;
 	} else if (p + p->s.size == bp) { /* join to lower nbr */
 		p->s.size += bp->s.size;
 	} else {
