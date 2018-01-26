@@ -16,6 +16,7 @@ rtc_init(void)
 	outb(0x71, reg_b | RTC_PIE); // write reg b
 
 	// task 5
+	// change 4 bits in reg A
 	outb(0x70, RTC_AREG); // set to reg a
 	uint8_t reg_a = inb(0x71); // read reg a
 	outb(0x70, RTC_AREG); // set to reg a
