@@ -204,7 +204,7 @@ void timer_stop(void)
 {
 	if (start_tsc > 0) {
 	uint64_t stop_tsc = read_tsc();
-	unsigned seconds = (stop_tsc - start_tsc) / cpu_freq;
+	unsigned seconds = (stop_tsc - start_tsc) / (1000 * cpu_freq);
 	print_time(seconds);
 	start_tsc = 0;
 	} else {
