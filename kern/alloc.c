@@ -50,10 +50,6 @@ test_alloc(uint8_t nbytes)
 
 	for(p = freep->s.next; ; p = p->s.next) {
 		if (p->s.size >= nunits) { /* big enough */
-
-			// LAB 5
-			spin_lock(&kernel_lock);
-
 			freep = p->s.prev;
 			if (p->s.size == nunits) { /* exactly */
 				(p->s.prev)->s.next = p->s.next;
@@ -92,38 +88,19 @@ test_free(void *ap)
 	for (p = freep; !(bp > p && bp < p->s.next); p = p->s.next)
 		if (p >= p->s.next && (bp > p || bp < p->s.next))
 			break; /* freed block at start or end of arena */
-			
-			// LAB 5
-			spin_lock(&kernel_lock);
 
 	if (bp + bp->s.size == p->s.next && p + p->s.size == bp) { /* join to both */
 		p->s.size += bp->s.size + p->s.next->s.size;
 		p->s.next->s.next->s.prev = p;
 		p->s.next = p->s.next->s.next;
 	} else if (bp + bp->s.size == p->s.next) { /* join to upper nbr */
-
-		// LAB 5
-		spin_lock(&kernel_lock);
-
 		bp->s.size += p->s.next->s.size;
-
-		// LAB 5
-		spin_unlock(&kernel_lock);
-
 		bp->s.next = p->s.next->s.next;
 		bp->s.prev = p->s.next->s.prev;
 		p->s.next->s.next->s.prev = bp;
 		p->s.next = bp;
 	} else if (p + p->s.size == bp) { /* join to lower nbr */
-
-		// LAB 5
-		spin_lock(&kernel_lock);
-
 		p->s.size += bp->s.size;
-
-		// LAB 5
-		spin_unlock(&kernel_lock);
-
 	} else {
 		bp->s.next = p->s.next;
 		bp->s.prev = p;
