@@ -237,7 +237,6 @@ struct PageInfo *
 page_alloc(int alloc_flags)
 {
 	// Fill this function in
-
 	// LAB 6
 	struct PageInfo *free_page = page_free_list;
 
@@ -251,8 +250,6 @@ page_alloc(int alloc_flags)
 		return NULL; // out of free memory
 	}
 	return free_page;
-
-	//return 0;
 }
 
 //
@@ -265,6 +262,13 @@ page_free(struct PageInfo *pp)
 	// Fill this function in
 	// Hint: You may want to panic if pp->pp_ref is nonzero or
 	// pp->pp_link is not NULL.
+	// LAB 6
+	if ((pp->pp_link > 0) | (pp->pp_ref > 0)) {
+		panic("page free panic");
+	}
+
+	pp->pp_link = page_free_list;
+	page_free_list = pp;
 }
 
 //
