@@ -177,6 +177,7 @@ mem_init(void)
 	// Your code goes here:
 	// lAB 7
 	boot_map_region(kern_pgdir, UPAGES, PTSIZE, PADDR(pages), PTE_U);
+	boot_map_region(kern_pgdir, (physaddr_t)pages, PTSIZE, PADDR(pages), PTE_W);
 
 	//////////////////////////////////////////////////////////////////////
 	// Use the physical memory that 'bootstack' refers to as the kernel
@@ -384,7 +385,6 @@ pgdir_walk(pde_t *pgdir, const void *va, int create)
 	if (*pgdir_entry) {
 		// physical address of p
 		return (pte_t *) KADDR(PTE_ADDR(*pgdir_entry)) + PTX(va);
-		//return (pte_t *) *pgdir_entry + PTX(va);
 	} else if (create) { // the relevant page table page does not exist yet
 		struct PageInfo *page = page_alloc(1);
 		if (page) {
@@ -396,7 +396,6 @@ pgdir_walk(pde_t *pgdir, const void *va, int create)
 			*pgdir_entry |= PTE_W;
 			*pgdir_entry |= PTE_U;
 			return (pte_t *) KADDR(PTE_ADDR(*pgdir_entry)) + PTX(va);
-			//return (pte_t *) *pgdir_entry + PTX(va);
 		}
 	}
 	return NULL;
