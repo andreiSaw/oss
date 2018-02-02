@@ -207,20 +207,20 @@ page_init(void)
 	// LAB 6
 	pages[1].pp_link = pages[0].pp_link;
 	pages[0].pp_link = NULL;
-	pages[0].pp_ref=1;
+	pages[0].pp_ref = 1;
 
 	size_t epm = EXTPHYSMEM / PGSIZE;
 	size_t iopm = IOPHYSMEM / PGSIZE;
 	pages[epm].pp_link = pages[iopm].pp_link;
 	for (i = iopm; i < epm; i++) {
 		pages[i].pp_link = NULL;
-		pages[i].pp_ref=1;
+		pages[i].pp_ref = 1;
 	}
 
 	pages[nf].pp_link = pages[epm].pp_link;
 	for (i = epm; i < nf; i++) {
 		pages[i].pp_link = NULL;
-		pages[i].pp_ref=1;
+		pages[i].pp_ref = 1;
 	}
 }
 
