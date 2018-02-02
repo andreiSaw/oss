@@ -69,7 +69,6 @@ mon_kerninfo(int argc, char **argv, struct Trapframe *tf)
 int
 mon_pages(int argc, char **argv, struct Trapframe *tf) {
 	size_t i, j;
-	bool f1,f2;
 	for (i = 1, j = 0; i < npages; i++) {
 		if (pages[i - 1].pp_ref && !pages[i].pp_ref) {
 			if (i - j == 1) {
