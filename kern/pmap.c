@@ -304,12 +304,6 @@ pte_t *
 pgdir_walk(pde_t *pgdir, const void *va, int create)
 {
 	// Fill this function in
-	if ((pp->pp_link > 0) | (pp->pp_ref > 0)) {
-		panic("page free panic");
-	}
-
-	pp->pp_link = page_free_list;
-	page_free_list = pp;
 }
 
 //
