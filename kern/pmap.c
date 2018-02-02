@@ -681,9 +681,6 @@ check_page_alloc(void)
 
 	cprintf("check_page_alloc() succeeded!\n");
 }
-<<<<<<< .merge_file_uyjw35
-=======
-
 //
 // Checks that the kernel part of virtual address space
 // has been setup roughly correctly (by mem_init()).
@@ -944,4 +941,3 @@ check_page_installed_pgdir(void)
 
 	cprintf("check_page_installed_pgdir() succeeded!\n");
 }
->>>>>>> .merge_file_nJLOR3
