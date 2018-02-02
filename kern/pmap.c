@@ -197,12 +197,14 @@ page_init(void)
 
 	// LAB 6
 	size_t nf = PADDR(boot_alloc(0)) / PGSIZE; // get the number of the next free page
+	//already
 	size_t i;
 	for (i = 0; i < npages; i++) {
 		pages[i].pp_ref = 0;
 		pages[i].pp_link = page_free_list;
 		page_free_list = &pages[i];
 	}
+	// LAB 6
 	pages[1].pp_link = pages[0].pp_link;
 	pages[0].pp_link = NULL;
 
