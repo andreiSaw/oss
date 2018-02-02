@@ -69,15 +69,16 @@ mon_kerninfo(int argc, char **argv, struct Trapframe *tf)
 int
 mon_pages(int argc, char **argv, struct Trapframe *tf) {
 	size_t i, j;
+	bool f1,f2;
 	for (i = 1, j = 0; i < npages; i++) {
-		if (!pages[i - 1].pp_ref && pages[i].pp_ref) {
+		if (pages[i - 1].pp_ref && !pages[i].pp_ref) {
 			if (i - j == 1) {
 				cprintf("%d ALLOCATED\n", j + 1);
 			} else {
 				cprintf("%d..%d ALLOCATED\n", j + 1, i);
 			}
 			j = i;
-		} else if (pages[i - 1].pp_ref && !pages[i].pp_ref) {
+		} else if (!pages[i - 1].pp_ref && pages[i].pp_ref) {
 			if (i - j == 1) {
 				cprintf("%d FREE\n", j + 1);
 			} else {
@@ -87,13 +88,13 @@ mon_pages(int argc, char **argv, struct Trapframe *tf) {
 		}
 	}
 	if (j == npages - 1) {
-		if (!pages[j].pp_ref) {
+		if (pages[j].pp_ref) {
 			cprintf("%d ALLOCATED\n", j + 1);
 		} else {
 			cprintf("%d FREE\n", j + 1);
 		}
 	} else {
-		if (!pages[j].pp_ref) {
+		if (pages[j].pp_ref) {
 			cprintf("%d..%d ALLOCATED\n", j + 1, npages);
 		} else {
 			cprintf("%d..%d FREE\n", j + 1, npages);
