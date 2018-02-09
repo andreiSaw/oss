@@ -8,7 +8,6 @@
 #include <inc/elf.h>
 #include <kern/kdebug.h>
 
-
 #include <kern/env.h>
 #include <kern/pmap.h>
 #include <kern/trap.h>
