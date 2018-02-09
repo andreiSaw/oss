@@ -143,12 +143,6 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 		// Return -1 if it is not.  Hint: Call user_mem_check.
 		// LAB 8: Your code here.
 
-		// my code
-		if (user_mem_check(curenv, usd, sizeof(struct UserStabData), PTE_U) < 0) {
-			return -1;
-		}
-		// end of my code
-
 		stabs = usd->stabs;
 		stab_end = usd->stab_end;
 		stabstr = usd->stabstr;
@@ -156,14 +150,6 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 
 		// Make sure the STABS and string table memory is valid.
 		// LAB 8: Your code here.
-		// my code
-		if (user_mem_check(curenv, stabs, stab_end - stabs + 1, PTE_U) < 0) {
-			return -1;
-		}
-		if (user_mem_check(curenv, stabstr, stabstr_end - stabstr + 1, PTE_U) < 0) {
-			return -1;
-		}
-		// end of my code
 	}
 
 	// String table validity checks
@@ -217,13 +203,12 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 	//	There's a particular stabs type used for line numbers.
 	//	Look at the STABS documentation and <inc/stab.h> to find
 	//	which one.
+
+
 	// Your code here.
-    stab_binsearch(stabs, &lline, &rline, N_SLINE, addr);
-    if (lline <= rline) {
-		info->eip_line = stabs[lline].n_desc;
-	} else {
-		info->eip_line = -1;
-	}
+	stab_binsearch(stabs, &lline, &rline, N_SLINE, addr);
+	info->eip_line = rline < lline ? -1: stabs[rline].n_desc;
+
 
 	// Search backwards from the line number for the relevant filename
 	// stab.
@@ -252,12 +237,12 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 uintptr_t
 find_function(const char * const fname)
 {
-	const struct Stab *stabs = __STAB_BEGIN__, *stab_end = __STAB_END__;
-	const char *stabstr = __STABSTR_BEGIN__;
-	//LAB 3: Your code is here.
+	 const struct Stab *stabs = __STAB_BEGIN__, *stab_end = __STAB_END__;
+	 const char *stabstr = __STABSTR_BEGIN__;
+	//LAB 3: Your code here.
 	int count;
     count = stab_end - stabs;
-	int i;
+	int i;    
 	for (i = 0; i <= count; i++) {
 		if ((stabs+i)->n_type == N_FUN) {
             const char *name = stabstr + (stabs + i)->n_strx;
@@ -265,7 +250,6 @@ find_function(const char * const fname)
 			char tmp[p + 1];
 			tmp[p] = '\0';
 			memcpy(tmp, name, p);
-		    //if (strncmp(fname, name, p) == 0) {
 			if (strcmp(fname, tmp) == 0) {
 			    return (stabs + i)->n_value;
 		    }
@@ -273,3 +257,4 @@ find_function(const char * const fname)
 	}
 	return 0;
 }
+
