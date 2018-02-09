@@ -40,14 +40,8 @@ i386_init(void)
 #endif
 
 	// user environment initialization functions
-<<<<<<< HEAD
-	// LAB 5
-
-	//env_init();
-=======
 	env_init();
 	trap_init();
->>>>>>> base/lab8
 
 	clock_idt_init();
 
